@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,63 +10,108 @@
     <style>
         /* Custom font for Inter */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         /* Base styles (light mode) */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light gray background */
-            color: #334155; /* Dark slate text */
+            background-color: #f0f4f8;
+            /* Light gray background */
+            color: #334155;
+            /* Dark slate text */
         }
-        h1, h2, h3 {
-            color: #1a202c; /* Darker text for headings */
+
+        h1,
+        h2,
+        h3 {
+            color: #1a202c;
+            /* Darker text for headings */
         }
+
         .app-card {
-            background-color: #ffffff; /* White card background */
+            background-color: #ffffff;
+            /* White card background */
             border-color: transparent;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
         }
+
         .app-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            background-color: #e0e7ff; /* Light indigo hover */
-            border-color: #a5b4fc; /* Indigo border on hover */
+            background-color: #e0e7ff;
+            /* Light indigo hover */
+            border-color: #a5b4fc;
+            /* Indigo border on hover */
         }
+
         .info-dropdown {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
+
         .info-dropdown.open {
-            max-height: 200px; /* Adjust as needed to fit content */
+            max-height: 200px;
+            /* Adjust as needed to fit content */
             transition: max-height 0.5s ease-in;
         }
 
         /* Enhanced Filter button styles */
+
         .filter-button {
-            @apply px-5 py-2 rounded-lg text-base font-semibold transition-colors duration-200 shadow-sm;
-            @apply bg-gray-200 text-gray-800 hover:bg-indigo-100 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+
+            border: 2px solid #e0e7ff;
+            /* Border color and thickness */
+            border-radius: 10px;
+            /* Adjust for more or less rounding */
+            padding: 2px 8px;
+            /* Spacing inside the box */
+            background-color: #e0e7ff;
+            /* Background color of the box */
+            display: inline-block;
+            /* Ensures the box wraps around its content */
+            margin: 2px;
+            /* Space around the box */
+            color: #333;
+            /* Optional: text color */
+
         }
+
+        .filter-button:hover {
+
+            border: 2px solid #a5b4fc;
+
+        }
+
         .filter-button.active {
-            @apply bg-indigo-600 text-white hover:bg-indigo-700;
+
+            border: 2px solid #3700ff;
+
         }
     </style>
 </head>
+
 <body class="p-4 sm:p-6 md:p-8 lg:p-10">
     <div class="max-w-7xl mx-auto">
         <!-- Navigation -->
         <nav class="mb-8 sm:mb-12 flex justify-center space-x-4 sm:space-x-6 relative">
-            <button onclick="showPage('app-store')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-app-store">
+            <button onclick="showPage('app-store')"
+                class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                id="nav-app-store">
                 AI Tools
             </button>
-            <button onclick="showPage('use-cases')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-use-cases">
+            <button onclick="showPage('use-cases')"
+                class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                id="nav-use-cases">
                 Use Cases
             </button>
-            <button onclick="showPage('links')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-links">
+            <button onclick="showPage('links')"
+                class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                id="nav-links">
                 Resources
             </button>
-            <button onclick="showPage('gallery')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-gallery">
+            <!-- <button onclick="showPage('gallery')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-gallery">
                 Gallery
-            </button>
+            </button> -->
         </nav>
 
         <div id="content-area">
@@ -656,7 +702,8 @@
 
                 <!-- Filter Tags -->
                 <div class="flex flex-wrap justify-center gap-3 mb-10 sm:mb-12">
-                    <button onclick="filterTools('All')" class="filter-button ${activeFilterCategory === 'All' ? 'active' : ''}">
+                    <button onclick="filterTools('All')" 
+                    class="filter-button ${activeFilterCategory === 'All' ? 'active' : ''}">
                         All Tools
                     </button>
                     ${Object.keys(apps).map(category => `
@@ -1011,11 +1058,11 @@
                 if (pageFromHash === 'links') {
                     showPage('links');
                 } else if (pageFromHash === 'gallery') {
-                     showPage('gallery');
+                    showPage('gallery');
                 } else if (pageFromHash === 'use-cases') {
-                     showPage('use-cases');
+                    showPage('use-cases');
                 }
-                 else {
+                else {
                     showPage('app-store');
                 }
             } else {
@@ -1024,4 +1071,5 @@
         });
     </script>
 </body>
+
 </html>
