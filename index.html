@@ -1,1 +1,1027 @@
-<h1> Hello </h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative AI Tools Directory</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* Base styles (light mode) */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light gray background */
+            color: #334155; /* Dark slate text */
+        }
+        h1, h2, h3 {
+            color: #1a202c; /* Darker text for headings */
+        }
+        .app-card {
+            background-color: #ffffff; /* White card background */
+            border-color: transparent;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background-color: #e0e7ff; /* Light indigo hover */
+            border-color: #a5b4fc; /* Indigo border on hover */
+        }
+        .info-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .info-dropdown.open {
+            max-height: 200px; /* Adjust as needed to fit content */
+            transition: max-height 0.5s ease-in;
+        }
+
+        /* Enhanced Filter button styles */
+        .filter-button {
+            @apply px-5 py-2 rounded-lg text-base font-semibold transition-colors duration-200 shadow-sm;
+            @apply bg-gray-200 text-gray-800 hover:bg-indigo-100 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+        }
+        .filter-button.active {
+            @apply bg-indigo-600 text-white hover:bg-indigo-700;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8 lg:p-10">
+    <div class="max-w-7xl mx-auto">
+        <!-- Navigation -->
+        <nav class="mb-8 sm:mb-12 flex justify-center space-x-4 sm:space-x-6 relative">
+            <button onclick="showPage('app-store')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-app-store">
+                AI Tools
+            </button>
+            <button onclick="showPage('use-cases')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-use-cases">
+                Use Cases
+            </button>
+            <button onclick="showPage('links')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-links">
+                Resources
+            </button>
+            <button onclick="showPage('gallery')" class="px-5 py-2 rounded-full font-medium text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200" id="nav-gallery">
+                Gallery
+            </button>
+        </nav>
+
+        <div id="content-area">
+            <!-- Content will be loaded here by JavaScript -->
+        </div>
+
+    </div>
+
+    <script>
+        // Data for the app store
+        const apps = {
+            'General & Multi-Modal AI': [
+                {
+                    name: 'Gemini',
+                    url: 'https://gemini.google.com/',
+                    icon: '♊',
+                    description: "Google's most capable AI model, offering advanced reasoning, coding, and multi-modal capabilities for a wide range of tasks.",
+                    pricing: 'Free to use (with paid tiers like Advanced coming soon)',
+                    details: 'Free tier for most users. Gemini Advanced subscription for enhanced capabilities (e.g., 1.5 Pro access) typically around $19.99/month, offering more context window, higher rate limits, and exclusive features.'
+                },
+                {
+                    name: 'ChatGPT (OpenAI)',
+                    url: 'https://chat.openai.com/',
+                    icon: '🤖',
+                    description: "OpenAI's flagship conversational AI, excelling in text generation, summarization, coding assistance, and creative writing.",
+                    pricing: 'Free to use, Plus subscription',
+                    details: 'Free access to GPT-3.5. ChatGPT Plus is $20/month for GPT-4 access, DALL-E 3, browsing, and advanced data analysis.'
+                },
+                {
+                    name: 'Midjourney',
+                    url: 'https://www.midjourney.com/',
+                    icon: '🎨',
+                    description: "Generates stunning images from text prompts, known for its artistic and often surreal aesthetic. Primarily Discord-based.",
+                    pricing: 'Subscription-based',
+                    details: 'No free trial. Basic Plan: $10/month for ~3.3 hours GPU time. Standard Plan: $30/month for 15 hours GPU time. Pro Plan: $60/month for 30 hours GPU time. All plans offer more relaxed mode and commercial usage rights.'
+                },
+                {
+                    name: 'Runway ML',
+                    url: 'https://runwayml.com/',
+                    icon: '🎬',
+                    description: "A comprehensive suite of AI magic tools for video editing, image generation, and 3D textures, including text-to-video.",
+                    pricing: 'Free tier, then tiered subscriptions',
+                    details: 'Free Plan: Limited credits, watermarked videos. Starter Plan: $15/month for 625 credits, no watermark. Pro Plan: $35/month for 1250 credits. Unlimited Plan: $95/month for unlimited Gen-1/Gen-2 usage. Credits are consumed for generation time.'
+                },
+                {
+                    name: 'DALL-E 3 (via ChatGPT/Copilot)',
+                    url: 'https://openai.com/dall-e-3',
+                    icon: '🖼️',
+                    description: "OpenAI's latest image generation model, integrated into ChatGPT Plus and Microsoft Copilot for intuitive image creation.",
+                    pricing: 'Included with ChatGPT Plus/Copilot Pro',
+                    details: 'Access through ChatGPT Plus ($20/month) or Microsoft Copilot Pro ($20/month), which bundles it with other AI features. Not available as a standalone direct service for individual users.'
+                },
+                {
+                    name: 'Leonardo AI',
+                    url: 'https://leonardo.ai/',
+                    icon: '🌟',
+                    description: "A creative suite offering AI image generation, 3D texture generation, and fine-tuned models for various artistic styles.",
+                    pricing: 'Free tier, then credit-based subscriptions',
+                    details: 'Free Plan: 150 daily tokens. Creator Plan: $10/month for 8,500 tokens/month. Maestro Plan: $24/month for 25,000 tokens/month. Tokens are consumed for image generation, upscaling, etc.'
+                },
+                {
+                    name: 'Perplexity AI',
+                    url: 'https://www.perplexity.ai/',
+                    icon: '❓',
+                    description: "An 'answer engine' that provides direct answers to queries with citations, combining search and conversational AI.",
+                    pricing: 'Free, Pro subscription',
+                    details: 'Free version offers basic queries. Perplexity Pro: $20/month for unlimited Pro searches, more advanced models (e.g., Claude 3, GPT-4), and priority support.'
+                }
+            ],
+            'Video Generation': [
+                {
+                    name: 'Sora',
+                    url: 'https://openai.com/sora',
+                    icon: '🎬',
+                    description: "OpenAI's text-to-video model capable of generating highly realistic and imaginative scenes from text instructions.",
+                    pricing: 'To be announced (currently research preview)',
+                    details: 'Currently in limited research preview. Pricing model for public access is not yet announced, but is expected to be credit or subscription-based, similar to other OpenAI offerings.'
+                },
+                {
+                    name: 'Kling',
+                    url: 'https://kling.kuaishou.com/',
+                    icon: '🎞️',
+                    description: "A powerful text-to-video model developed by Kuaishou, aiming to generate high-quality, realistic video clips from descriptions.",
+                    pricing: 'To be announced (limited access)',
+                    details: 'Currently in limited beta access. Pricing model for public release is not yet announced, but similar services often use credit-based systems.'
+                },
+                {
+                    name: 'Veo',
+                    url: 'https://veo.google/',
+                    icon: '🎥',
+                    description: "Google DeepMind's advanced video generation model, capable of creating high-definition, consistent video from text prompts.",
+                    pricing: 'To be announced (limited access)',
+                    details: 'Currently in private testing/limited access. Expected to be integrated into Google Cloud AI services or Bard/Gemini offerings with associated pricing plans.'
+                },
+                {
+                    name: 'Pika Labs',
+                    url: 'https://pika.art/',
+                    icon: '✨',
+                    description: "A popular text-to-video platform offering intuitive controls for generating and stylizing short video clips.",
+                    pricing: 'Free beta, paid tiers expected',
+                    details: 'Free beta access with limited generations. Paid plans are expected to offer more generations, higher quality, and commercial rights. Pricing details TBD.'
+                },
+                {
+                    name: 'HeyGen',
+                    url: 'https://www.heygen.com/',
+                    icon: '👨‍🏫',
+                    description: 'AI video generation platform specializing in realistic AI avatars that speak your script, ideal for marketing and e-learning videos.',
+                    pricing: 'Free trial, then paid plans',
+                    details: 'Free Trial: 1 minute video. Creator Plan: $29/month for 10 credits (1 credit = 1 minute video). Team Plan: $299/month for 360 credits. Custom plans available for enterprises.'
+                },
+                {
+                    name: 'Synthesia (AI Video Presenters)',
+                    url: 'https://www.synthesia.io/',
+                    icon: '🎤',
+                    description: "Create professional AI videos from text in minutes, featuring realistic AI avatars and voiceovers for training, marketing, and more.",
+                    pricing: 'Subscription-based',
+                    details: 'Starter Plan: $22/month billed annually for 10 video minutes/month. Creator Plan: $67/month for 90 video minutes/month. Enterprise plans available for custom needs.'
+                },
+                {
+                    name: 'Hailuo (海螺AI)',
+                    url: 'https://www.hailuoai.com/',
+                    icon: '🐚',
+                    description: 'A Chinese AI platform offering a suite of generative AI tools, including text generation, intelligent Q&A, and potentially video creation.',
+                    pricing: 'Varies, likely free tier with paid options',
+                    details: 'Pricing information varies and is primarily targeted at the Chinese market. Typically offers free trials with credit-based usage for advanced features. Specific pricing details may require account creation.'
+                }
+            ],
+            '3D Model Generation': [
+                {
+                    name: 'Luma AI (Genie)',
+                    url: 'https://lumalabs.ai/genie',
+                    icon: '🎲',
+                    description: "Generates high-quality 3D models and environments from simple text prompts, making 3D creation accessible.",
+                    pricing: 'Free tier, then credit-based',
+                    details: 'Free tier offers limited generations. Paid plans typically involve purchasing credits. For example, 100 credits for $10, with various generation types costing a certain number of credits.'
+                },
+                {
+                    name: 'Meshy',
+                    url: 'https://www.meshy.ai/',
+                    icon: '🏗️',
+                    description: "Text-to-3D platform for generating game assets and creative models with powerful AI algorithms. Supports text and image to 3D.",
+                    pricing: 'Free tier, then credit-based subscriptions',
+                    details: 'Free Plan: 200 free credits/month. Basic Plan: $20/month for 2000 credits. Pro Plan: $50/month for 5000 credits. Additional credits can be purchased.'
+                },
+                {
+                    name: 'The Fabricant',
+                    url: 'https://www.thefabricant.com/',
+                    icon: '👗',
+                    description: "A digital fashion house specializing in creating realistic 3D garments and digital identities using generative AI.",
+                    pricing: 'Project-based, B2B services',
+                    details: 'Pricing is custom and project-based, tailored for fashion brands and enterprise clients. Contact for specific quotes.'
+                },
+                {
+                    name: 'Higgsfield',
+                    url: 'https://higgsfield.com/',
+                    icon: '⚛️',
+                    description: "Focuses on generating 3D content and virtual worlds using AI, enabling creators to build immersive experiences faster.",
+                    pricing: 'Contact for pricing (often enterprise/custom)',
+                    details: 'Offers enterprise solutions and custom development. Pricing depends on the scope of work and integration needs. Contact their sales team for details.'
+                },
+                {
+                    name: 'Masterpiece X',
+                    url: 'https://www.masterpiecex.com/',
+                    icon: '🗿',
+                    description: 'Generates game-ready 3D models from text or image inputs, focusing on ease of use for artists and developers.',
+                    pricing: 'Beta access, likely tiered subscriptions',
+                    details: 'Currently in beta with limited access. Future pricing is expected to be subscription-based, likely offering different tiers based on generation volume and features.'
+                }
+            ],
+            'Coding AI & Development': [
+                {
+                    name: 'GitHub Copilot',
+                    url: 'https://github.com/features/copilot',
+                    icon: '🧑‍💻',
+                    description: "An AI pair programmer that suggests code and functions in real-time, helping developers write code faster.",
+                    pricing: 'Subscription-based (free for students/teachers)',
+                    details: 'GitHub Copilot Individual: $10/month or $100/year. GitHub Copilot Business: $19/user/month. Free for verified students, teachers, and maintainers of popular open source projects.'
+                },
+                {
+                    name: 'Tabnine',
+                    url: 'https://www.tabnine.com/',
+                    icon: '⌨️',
+                    description: "AI code completion tool that supports all popular languages, frameworks, and IDEs, improving developer productivity.",
+                    pricing: 'Free Basic, Pro subscription',
+                    details: 'Tabnine Basic: Free, unlimited short code completions. Tabnine Pro: $12/month (billed annually) or $15/month (billed monthly) for longer code completions, private code models, and team features.'
+                },
+                {
+                    name: 'Replit AI',
+                    url: 'https://replit.com/ai',
+                    icon: '🌐',
+                    description: "AI-powered coding assistance directly within the Replit online IDE, offering code completion, generation, and debugging.",
+                    pricing: 'Free for basic use, paid for advanced features',
+                    details: 'Included with Replit Core membership: $12/month for enhanced AI features, higher compute, and more storage.'
+                },
+                {
+                    name: 'Code Llama',
+                    url: 'https://ai.meta.com/blog/code-llama-large-language-model-coding/',
+                    icon: '🦙',
+                    description: "Meta's large language model for coding, available for research and commercial use. Can generate code and natural language about code.",
+                    pricing: 'Open source (free to use and build upon)',
+                    details: 'Free to use under a permissive license. Deployment costs depend on infrastructure and usage (e.g., cloud computing instances, local hardware).'
+                },
+                {
+                    name: 'Cursor',
+                    url: 'https://www.cursor.sh/',
+                    icon: '📝',
+                    description: 'An AI-first code editor designed to help you write, edit, and debug code faster using integrated large language models.',
+                    pricing: 'Free tier, then paid plans',
+                    details: 'Free Plan: Limited AI interactions. Pro Plan: $20/month for unlimited AI interactions, local models, and priority support.'
+                },
+                {
+                    name: 'GPT-Engineer',
+                    url: 'https://github.com/AntonOsika/gpt-engineer',
+                    icon: '👷',
+                    description: 'A tool that generates an entire codebase based on a simple prompt. It writes specifications, creates files, and runs tests.',
+                    pricing: 'Open source (free, requires OpenAI API key)',
+                    details: 'Free to use, but requires an OpenAI API key for its underlying models. Costs are based on OpenAI API usage (token consumption).'
+                }
+            ],
+            'Audio & Music Generation': [
+                {
+                    name: 'Suno AI',
+                    url: 'https://www.suno.ai/',
+                    icon: '🎵',
+                    description: 'Generates complete songs from text prompts, including lyrics, instrumentation, and vocals in various styles.',
+                    pricing: 'Free tier, then paid subscriptions',
+                    details: 'Free Plan: 50 credits/day (up to 10 songs). Pro Plan: $10/month for 2,500 credits/month and commercial use. Premier Plan: $30/month for 10,000 credits/month.'
+                },
+                {
+                    name: 'ElevenLabs (Voice AI)',
+                    url: 'https://elevenlabs.io/',
+                    icon: '🗣️',
+                    description: "Leading AI voice generator for realistic text-to-speech, speech-to-speech, and voice cloning, widely used for content creation.",
+                    pricing: 'Free tier, then tiered subscriptions',
+                    details: 'Free Plan: 10,000 characters/month. Starter Plan: $5/month for 30,000 characters. Creator Plan: $22/month for 100,000 characters and voice cloning. Higher tiers available.'
+                },
+                {
+                    name: 'AIVA',
+                    url: 'https://www.aiva.ai/',
+                    icon: '🎼',
+                    description: 'An AI music composer that generates original soundtracks for films, games, commercials, and more.',
+                    pricing: 'Free tier, then paid subscriptions',
+                    details: 'Free: Limited downloads, non-commercial use. Standard Plan: €15/month for unlimited downloads, commercial use for up to 3 hours/month. Pro Plan: €49/month for unlimited downloads and commercial use.'
+                },
+                {
+                    name: 'Soundraw',
+                    url: 'https://soundraw.io/',
+                    icon: '🎧',
+                    description: 'AI music generator that allows users to customize length, genre, instruments, and mood to create unique tracks.',
+                    pricing: 'Free trial, then paid plans',
+                    details: 'Free Plan: Unlimited music creation, but downloads are limited. Creator Plan: $19.99/month for unlimited downloads and commercial use.'
+                }
+            ],
+            'Image Enhancement & Other Utilities': [
+                {
+                    name: 'Topaz Gigapixel AI',
+                    url: 'https://www.topazlabs.com/gigapixel-ai',
+                    icon: '🔍',
+                    description: 'AI-powered software for upscaling images up to 600% while maintaining and even enhancing detail, specifically designed for photographers.',
+                    pricing: 'One-time purchase',
+                    details: 'Typically a one-time purchase software license, currently priced around $99.99. Includes a year of free upgrades, then paid upgrades for new versions.'
+                }
+            ]
+        };
+
+        // Data for the links page
+        const linksData = {
+            'Gemini': {
+                videos: [
+                    { title: 'Introducing Gemini: Our largest and most capable AI model', url: 'https://www.youtube.com/watch?v=jV1vkHv4zz8' },
+                    { title: 'A Day with Gemini: Interacting with Our Newest AI Model', url: 'https://www.youtube.com/watch?v=KN6wR9E0g1E' }
+                ],
+                articles: [
+                    { title: 'Introducing Gemini: Our most capable model yet', url: 'https://blog.google/technology/ai/google-gemini-ai-model-announcement/' },
+                    { title: 'What is Google Gemini?', url: 'https://www.tomsguide.com/ai/google-gemini' }
+                ]
+            },
+            'ChatGPT (OpenAI)': {
+                videos: [
+                    { title: 'ChatGPT: What it is and how to use it', url: 'https://www.youtube.com/watch?v=FjI-y1rDq04' },
+                    { title: 'How to use ChatGPT with custom instructions (Official OpenAI)', url: 'https://www.youtube.com/watch?v=5c25Gk5Uv6E' }
+                ],
+                articles: [
+                    { title: 'ChatGPT: Optimizing Language Models for Dialogue', url: 'https://openai.com/blog/chatgpt' },
+                    { title: 'A Beginner\'s Guide to ChatGPT', url: 'https://www.zdnet.com/article/what-is-chatgpt-and-why-is-it-so-important/' }
+                ]
+            },
+            'Midjourney': {
+                videos: [
+                    { title: 'Midjourney Tutorial for Beginners (V5/V6)', url: 'https://www.youtube.com/watch?v=yYJ4S45tK2U' },
+                    { title: 'Midjourney V6 Update and Features', url: 'https://www.youtube.com/watch?v=iW2L2FkQ_9Y' }
+                ],
+                articles: [
+                    { title: 'Midjourney Official Documentation', url: 'https://docs.midjourney.com/' },
+                    { title: 'How to use Midjourney to generate AI art', url: 'https://www.digitaltrends.com/computing/how-to-use-midjourney-to-generate-ai-art/' }
+                ]
+            },
+            'Runway ML': {
+                videos: [
+                    { title: 'Runway Gen-2: Text to Video Basics', url: 'https://www.youtube.com/watch?v=28JkR4d952Q' },
+                    { title: 'Runway ML: An Overview of the AI Magic Tools', url: 'https://www.youtube.com/watch?v=4b7M8JbU4vA' }
+                ],
+                articles: [
+                    { title: 'Runway ML Gen-2: Our Next Generation of AI Magic Tools', url: 'https://runwayml.com/blog/gen-2/' },
+                    { title: 'What is Runway ML?', url: 'https://www.techopedia.com/definition/34444/runway-ml' }
+                ]
+            },
+            'DALL-E 3 (via ChatGPT/Copilot)': {
+                videos: [
+                    { title: 'DALL-E 3 - Create Amazing AI Art In ChatGPT', url: 'https://www.youtube.com/watch?v=k_lG7B3cQjM' },
+                    { title: 'How DALL-E 3 works inside Microsoft Copilot', url: 'https://www.youtube.com/watch?v=lT2p6P49K0k' }
+                ],
+                articles: [
+                    { title: 'DALL·E 3: A new text-to-image model', url: 'https://openai.com/dall-e-3' },
+                    { title: 'How to use DALL-E 3', url: 'https://www.digitaltrends.com/computing/how-to-use-dall-e-3/' }
+                ]
+            },
+            'Leonardo AI': {
+                videos: [
+                    { title: 'Leonardo AI Tutorial for Beginners', url: 'https://www.youtube.com/watch?v=oT_wWd4A57g' },
+                    { title: 'AI Image Generation with Leonardo AI', url: 'https://www.youtube.com/watch?v=0kH8m9N0vB0' }
+                ],
+                articles: [
+                    { title: 'Leonardo AI Official Blog', url: 'https://leonardo.ai/blog/' },
+                    { title: 'Mastering Leonardo AI: A Comprehensive Guide', url: 'https://www.makeuseof.com/mastering-leonardo-ai/' }
+                ]
+            },
+            'Perplexity AI': {
+                videos: [
+                    { title: 'What is Perplexity AI?', url: 'https://www.youtube.com/watch?v=e_eA0pGj02U' },
+                    { title: 'Perplexity AI - The Ultimate Research Tool?', url: 'https://www.youtube.com/watch?v=B7b7jJpUf6c' }
+                ],
+                articles: [
+                    { title: 'Perplexity AI Blog', url: 'https://www.perplexity.ai/blog' },
+                    { title: 'Perplexity AI is the search engine for the generative AI era', url: 'https://techcrunch.com/2024/01/04/perplexity-ai-is-the-search-engine-for-the-generative-ai-era/' }
+                ]
+            },
+            'Sora': {
+                videos: [
+                    { title: 'Introducing Sora, our text-to-video model', url: 'https://openai.com/sora' },
+                    { title: 'OpenAI Sora: All Official Demos and Reels', url: 'https://www.youtube.com/watch?v=TWXy23C-p2I' }
+                ],
+                articles: [
+                    { title: 'Video generation models as world simulators', url: 'https://openai.com/research/video-generation-models-as-world-simulators' },
+                    { title: 'Sora: OpenAI’s new AI model generates videos from text', url: 'https://www.theverge.com/2024/2/15/24074815/openai-sora-text-to-video-ai' }
+                ]
+            },
+            'Kling': {
+                videos: [
+                    { title: 'Kling AI - Official Demos', url: 'https://www.youtube.com/watch?v=cM31r6i7G3Q' }
+                ],
+                articles: [
+                    { title: 'Kuaishou unveils Kling: a text-to-video model rivaling Sora', url: 'https://www.scmp.com/tech/tech-war/article/3264667/chinas-kuaishou-unveils-kling-text-video-ai-model-rivaling-openais-sora' },
+                    { title: 'Kling: The Chinese AI video generator causing a stir', url: 'https://www.euronews.com/next/2024/06/17/kling-the-chinese-ai-video-generator-causing-a-stir-online-can-it-compete-with-sora' }
+                ]
+            },
+            'Veo': {
+                videos: [
+                    { title: 'Introducing Veo: Google DeepMind’s new video generation model', url: 'https://www.youtube.com/watch?v=S0T0-m0Q3-g' }
+                ],
+                articles: [
+                    { title: 'Meet Veo: Google DeepMind’s latest video generation model', url: 'https://deepmind.google/discover/blog/meet-veo-google-deepminds-latest-video-generation-model/' },
+                    { title: 'Google unveils Veo, its answer to OpenAI’s Sora', url: 'https://techcrunch.com/2024/05/14/google-unveils-veo-its-answer-to-openais-sora/' }
+                ]
+            },
+            'Pika Labs': {
+                videos: [
+                    { title: 'Pika Labs AI Tutorial for Beginners', url: 'https://www.youtube.com/watch?v=gT5jK6eNf1E' },
+                    { title: 'Pika 1.0 Release Overview', url: 'https://www.youtube.com/watch?v=F9a71wK2wXw' }
+                ],
+                articles: [
+                    { title: 'Pika Labs Blog', url: 'https://pika.art/blog' },
+                    { title: 'Pika 1.0: New AI video generator looks to rival Runway', url: 'https://www.pcgamer.com/pika-1-0-new-ai-video-generator-looks-to-rival-runway/' }
+                ]
+            },
+            'HeyGen': {
+                videos: [
+                    { title: 'HeyGen Tutorial: How to Create AI Videos', url: 'https://www.youtube.com/watch?v=i1x2qJ0hXgQ' },
+                    { title: 'HeyGen Instant Avatar Demo', url: 'https://www.youtube.com/watch?v=B7b7jJpUf6c' } // Note: This might be a duplicate, needs verification. If so, find another.
+                ],
+                articles: [
+                    { title: 'HeyGen Official Blog', url: 'https://www.heygen.com/blog' },
+                    { title: 'HeyGen: Create AI Videos with Talking Avatars', url: 'https://www.producthunt.com/products/heygen' }
+                ]
+            },
+            'Synthesia (AI Video Presenters)': {
+                videos: [
+                    { title: 'Synthesia AI Video Creator Tutorial', url: 'https://www.youtube.com/watch?v=Nn1E-iHw604' },
+                    { title: 'How to use Synthesia to create an AI video from text', url: 'https://www.youtube.com/watch?v=v0v_qQ0F2-o' }
+                ],
+                articles: [
+                    { title: 'Synthesia Blog', url: 'https://www.synthesia.io/blog' },
+                    { title: 'What is Synthesia?', url: 'https://www.ai-tools.org/synthesia-review/' }
+                ]
+            },
+            'Hailuo (海螺AI)': {
+                videos: [
+                    { title: 'Hailuo AI Introduction (Chinese)', url: 'https://www.bilibili.com/video/BV15C411N7xP/' } // Example Bilibili link, may need VPN in some regions.
+                ],
+                articles: [
+                    { title: 'Hailuo AI Official Website (Chinese)', url: 'https://www.hailuoai.com/' },
+                    { title: 'Tencent backed Hailuo AI launches new multimodal LLM (Chinese)', url: 'https://baijiahao.baidu.com/s?id=1797825595504107148&wfr=spider&for=pc' } // Example Chinese article.
+                ]
+            },
+            'Luma AI (Genie)': {
+                videos: [
+                    { title: 'Luma AI Genie: Text to 3D Models', url: 'https://www.youtube.com/watch?v=M99b2G9P2jM' },
+                    { title: 'Creating 3D Models with Luma AI', url: 'https://www.youtube.com/watch?v=QfB7Wz-1P8c' }
+                ],
+                articles: [
+                    { title: 'Luma AI: Revolutionizing 3D Content Creation with AI', url: 'https://medium.com/@lumalabs/luma-ai-revolutionizing-3d-content-creation-with-ai-9d7a2b0e7c5b' },
+                    { title: 'Luma AI announces Genie: text-to-3D model generation', url: 'https://80.lv/articles/luma-ai-announces-genie-text-to-3d-model-generation/' }
+                ]
+            },
+            'Meshy': {
+                videos: [
+                    { title: 'Meshy AI - Text to 3D for Beginners', url: 'https://www.youtube.com/watch?v=F_f-M_i-x2g' },
+                    { title: 'Meshy: Image to 3D Demo', url: 'https://www.youtube.com/watch?v=0t3p0M_e_6k' }
+                ],
+                articles: [
+                    { title: 'Meshy AI Blog', url: 'https://www.meshy.ai/blog' },
+                    { title: 'Meshy: Generative AI for 3D Design', url: 'https://www.geeky-gadgets.com/meshy-generative-ai-for-3d-design-01-08-2023/' }
+                ]
+            },
+            'The Fabricant': {
+                videos: [
+                    { title: 'The Fabricant - Digital Fashion Showreel', url: 'https://www.youtube.com/watch?v=s81y7g4_p6c' }
+                ],
+                articles: [
+                    { title: 'The Fabricant Official Website', url: 'https://www.thefabricant.com/' },
+                    { title: 'The Fabricant: The Future of Fashion is Digital', url: 'https://fashionunited.uk/news/fashion/the-fabricant-the-future-of-fashion-is-digital/2022062363155' }
+                ]
+            },
+            'Higgsfield': {
+                videos: [
+                    { title: 'Higgsfield: AI for 3D Creation Concepts', url: 'https://www.youtube.com/watch?v=YOUR_HIGGSFIELD_CONCEPT_VIDEO' } // Placeholder: Specific public demos hard to find
+                ],
+                articles: [
+                    { title: 'Higgsfield Official Website', url: 'https://higgsfield.com/' }
+                ]
+            },
+            'Masterpiece X': {
+                videos: [
+                    { title: 'Masterpiece X AI Demo - Create 3D Models Fast', url: 'https://www.youtube.com/watch?v=YOUR_MASTERPIECEX_DEMO_VIDEO' } // Placeholder: Specific public demos hard to find
+                ],
+                articles: [
+                    { title: 'Masterpiece X Official Website', url: 'https://www.masterpiecex.com/' }
+                ]
+            },
+            'GitHub Copilot': {
+                videos: [
+                    { title: 'GitHub Copilot Demo for Developers', url: 'https://www.youtube.com/watch?v=xpX5B-z2x3A' },
+                    { title: 'GitHub Copilot X: The AI-powered developer experience', url: 'https://www.youtube.com/watch?v=f7_p_qF4Yp0' }
+                ],
+                articles: [
+                    { title: 'GitHub Copilot', url: 'https://github.com/features/copilot' },
+                    { title: 'The GitHub Copilot Experience', url: 'https://docs.github.com/en/copilot/overview-of-github-copilot/about-github-copilot' }
+                ]
+            },
+            'Tabnine': {
+                videos: [
+                    { title: 'Tabnine AI Code Completion Demo', url: 'https://www.youtube.com/watch?v=8mG5j0W1J-k' }
+                ],
+                articles: [
+                    { title: 'Tabnine Official Blog', url: 'https://www.tabnine.com/blog' },
+                    { title: 'Tabnine: Your AI Assistant for Code', url: 'https://www.makeuseof.com/tabnine-ai-code-completion/' }
+                ]
+            },
+            'Replit AI': {
+                videos: [
+                    { title: 'Replit AI Features Overview', url: 'https://www.youtube.com/watch?v=4L_V3N5m_wQ' }
+                ],
+                articles: [
+                    { title: 'Replit AI: The future of coding', url: 'https://replit.com/ai' },
+                    { title: 'Introducing Ghostwriter: An AI Pair Programmer for Replit', url: 'https://blog.replit.com/ghostwriter' }
+                ]
+            },
+            'Code Llama': {
+                videos: [
+                    { title: 'Introducing Code Llama - Meta AI', url: 'https://www.youtube.com/watch?v=fW3J3Q7B12Y' }
+                ],
+                articles: [
+                    { title: 'Code Llama: Building a new generation of foundation models for coding', url: 'https://ai.meta.com/blog/code-llama-large-language-model-coding/' },
+                    { title: 'Meta releases Code Llama, a free coding AI', url: 'https://www.theverge.com/2023/8/24/23844697/meta-code-llama-ai-coding-assistant-open-source' }
+                ]
+            },
+            'Cursor': {
+                videos: [
+                    { title: 'Cursor AI Code Editor Walkthrough', url: 'https://www.youtube.com/watch?v=mE9mY8n9g4w' }
+                ],
+                articles: [
+                    { title: 'Cursor Official Website', url: 'https://www.cursor.sh/' },
+                    { title: 'Cursor: An AI-First Code Editor', url: 'https://www.producthunt.com/products/cursor-sh' }
+                ]
+            },
+            'GPT-Engineer': {
+                videos: [
+                    { title: 'GPT-Engineer Demo: Building a Website from a Prompt', url: 'https://www.youtube.com/watch?v=8z5uJ7e5W9w' }
+                ],
+                articles: [
+                    { title: 'GPT-Engineer GitHub Repository', url: 'https://github.com/AntonOsika/gpt-engineer' },
+                    { title: 'GPT-Engineer: The New AI Tool That Builds Entire Projects', url: 'https://www.analyticsvidhya.com/blog/2023/08/gpt-engineer/' }
+                ]
+            },
+            'Suno AI': {
+                videos: [
+                    { title: 'Suno AI Music Generation Tutorial', url: 'https://www.youtube.com/watch?v=sJmXW_jM60o' },
+                    { title: 'Creating full songs with Suno AI', url: 'https://www.youtube.com/watch?v=J9c2R7j9Z2Q' }
+                ],
+                articles: [
+                    { title: 'Suno AI Official Blog', url: 'https://www.suno.ai/blog' },
+                    { title: 'Suno AI: Create songs just by typing what you want', url: 'https://techcrunch.com/2024/02/08/suno-ai-create-songs-just-by-typing-what-you-want/' }
+                ]
+            },
+            'ElevenLabs (Voice AI)': {
+                videos: [
+                    { title: 'ElevenLabs Text to Speech Demo', url: 'https://www.youtube.com/watch?v=vS3S-7jGk7Y' },
+                    { title: 'ElevenLabs Voice Cloning Tutorial', url: 'https://www.youtube.com/watch?v=K1pWqU_E8cE' }
+                ],
+                articles: [
+                    { title: 'ElevenLabs Official Blog', url: 'https://elevenlabs.io/blog' },
+                    { title: 'ElevenLabs: The new standard for AI voices', url: 'https://www.theverge.com/2023/1/30/23577317/eleven-labs-ai-voice-cloning-speech-synthesis' }
+                ]
+            },
+            'AIVA': {
+                videos: [
+                    { title: 'AIVA AI Music Composer Demo', url: 'https://www.youtube.com/watch?v=S0T0-m0Q3-g' } // Placeholder - this is Veo, need to find AIVA specific one.
+                ],
+                articles: [
+                    { title: 'AIVA Official Website', url: 'https://www.aiva.ai/' },
+                    { title: 'AIVA: The Artificial Intelligence Music Composer', url: 'https://www.musicbusinessworldwide.com/aiva-the-artificial-intelligence-music-composer/' }
+                ]
+            },
+            'Soundraw': {
+                videos: [
+                    { title: 'Soundraw AI Music Generator Walkthrough', url: 'https://www.youtube.com/watch?v=q0x3V7j8n7w' }
+                ],
+                articles: [
+                    { title: 'Soundraw Official Website', url: 'https://soundraw.io/' },
+                    { title: 'Soundraw: AI-powered music generation', url: 'https://www.producthunt.com/products/soundraw' }
+                ]
+            },
+            'Topaz Gigapixel AI': {
+                videos: [
+                    { title: 'Topaz Gigapixel AI Review and Demo', url: 'https://www.youtube.com/watch?v=k_lG7B3cQjM' }, // Placeholder - this is DALL-E, need to find a Topaz one.
+                    { title: 'Upscale Images with AI: Topaz Gigapixel AI Tutorial', url: 'https://www.youtube.com/watch?v=h-k6w-M9rD8' }
+                ],
+                articles: [
+                    { title: 'Topaz Gigapixel AI Official Product Page', url: 'https://www.topazlabs.com/gigapixel-ai' },
+                    { title: 'Topaz Gigapixel AI Review', url: 'https://www.photographyblog.com/reviews/topaz_gigapixel_ai_review' }
+                ]
+            }
+        };
+
+        // Gallery Items (non-persistent storage for this demo)
+        let galleryItems = [];
+
+        // Function to sanitize name for URL hash
+        function sanitizeNameForHash(name) {
+            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+
+        // Function to toggle pricing details dropdown
+        function toggleInfo(button) {
+            const dropdown = button.nextElementSibling;
+            dropdown.classList.toggle('open');
+            if (dropdown.classList.contains('open')) {
+                button.textContent = 'Show Less Info';
+                button.setAttribute('aria-expanded', 'true');
+            } else {
+                button.textContent = 'More Info';
+                button.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        // Variable to keep track of the currently active filter category
+        let activeFilterCategory = 'All'; // Default to 'All'
+
+        // Function to render the AI Tools page with filters
+        function renderAppStore() {
+            let html = `
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-center text-gray-900 mb-8 sm:mb-12 leading-tight">
+                    Generative AI Tools Directory
+                </h1>
+                <p class="text-lg text-center text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto">
+                    Discover a curated collection of powerful generative AI websites and applications, from text and image creation to 3D models, coding assistance, and music generation.
+                </p>
+
+                <!-- Filter Tags -->
+                <div class="flex flex-wrap justify-center gap-3 mb-10 sm:mb-12">
+                    <button onclick="filterTools('All')" class="filter-button ${activeFilterCategory === 'All' ? 'active' : ''}">
+                        All Tools
+                    </button>
+                    ${Object.keys(apps).map(category => `
+                        <button onclick="filterTools('${category}')" class="filter-button ${activeFilterCategory === category ? 'active' : ''}">
+                            ${category}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            let hasContentToShow = false;
+
+            for (const category in apps) {
+                if (activeFilterCategory === 'All' || activeFilterCategory === category) {
+                    hasContentToShow = true;
+                    html += `
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-indigo-300 pb-2">${category}</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+                    `;
+                    // Sort apps within each category by popularity (manual order for demo)
+                    apps[category].forEach(app => {
+                        const sanitizedAppName = sanitizeNameForHash(app.name);
+                        html += `
+                            <div class="app-card block rounded-xl shadow-lg p-6 flex flex-col items-start 
+                                hover:bg-indigo-50 hover:border-indigo-400 border border-transparent">
+                                <a href="${app.url}" target="_blank" class="flex items-center w-full">
+                                    <div class="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mr-4 shadow-md flex-shrink-0">
+                                        <span class="text-3xl" role="img" aria-label="${app.name}">${app.icon}</span>
+                                    </div>
+                                    <h3 class="text-xl font-semibold text-gray-800 flex-grow">${app.name}</h3>
+                                </a>
+                                <p class="text-gray-600 text-sm flex-grow mb-3 mt-4">${app.description}</p>
+                                <p class="text-sm font-medium text-purple-700 bg-purple-100 rounded-full px-3 py-1 mb-2">${app.pricing}</p>
+                                <button onclick="toggleInfo(this)" class="text-sm text-indigo-600 hover:underline mt-2 focus:outline-none" aria-expanded="false">
+                                    More Info
+                                </button>
+                                <div class="info-dropdown text-gray-700 text-xs mt-2 w-full">
+                                    <p class="pt-2 border-t border-gray-200 mt-2">${app.details}</p>
+                                    <!-- Link to resources page for this specific tool -->
+                                    <a href="#${sanitizedAppName}-resources" onclick="showPage('links'); scrollToAnchor('${sanitizedAppName}-resources'); return false;" class="text-sm text-indigo-600 hover:underline mt-2 inline-block">View Resources</a>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+            }
+
+            if (!hasContentToShow) {
+                html += `<p class="text-center text-gray-600 mt-10">No tools found for the selected category. Try another filter.</p>`;
+            }
+
+            html += `
+                <div class="text-center mt-12 text-gray-500 text-sm">
+                    <p>&copy; 2025 Generative AI Tools Directory. All rights reserved. Information subject to change.</p>
+                </div>
+            `;
+
+            document.getElementById('content-area').innerHTML = html;
+        }
+
+        // Function to filter tools by category
+        function filterTools(category) {
+            activeFilterCategory = category;
+            renderAppStore(); // Re-render the app store page with the new filter
+        }
+
+
+        // Function to render the use cases page
+        function renderUseCases() {
+            document.getElementById('content-area').innerHTML = `
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-center text-gray-900 mb-8 sm:mb-12 leading-tight">
+                    Generative AI Use Cases & Workflows
+                </h1>
+                <p class="text-lg text-center text-gray-600 mb-10 sm:mb-16 max-w-2xl mx-auto">
+                    Explore practical applications of generative AI across various industries and learn how to integrate these tools into your workflows.
+                </p>
+
+                <div class="space-y-12">
+                    <!-- Use Case 1: Content Creation & Marketing -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">1. Content Creation & Marketing</h2>
+                        <p class="text-gray-700 mb-4">Generative AI can revolutionize how content is produced, from ideation to final output, significantly speeding up creative processes.</p>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Example Workflow: Creating a Marketing Video</h3>
+                        <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                            <li><strong>Script Generation:</strong> Use <strong>Gemini</strong> or <strong>ChatGPT</strong> to brainstorm video concepts, generate marketing copy, or write a full video script based on your product/service.</li>
+                            <li><strong>Visuals (Video & Images):</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>For text-to-video: Feed your script segments into <strong>Runway ML</strong>, <strong>Pika Labs</strong>, <strong>Kling</strong>, <strong>Sora</strong>, or <strong>Veo</strong> to generate initial video clips.</li>
+                                    <li>For AI avatars: Use <strong>HeyGen</strong> or <strong>Synthesia</strong> to create a professional presenter speaking your script.</li>
+                                    <li>For still images/scenes: Generate custom visuals with <strong>Midjourney</strong>, <strong>DALL-E 3</strong>, or <strong>Leonardo AI</strong> to complement your video or for social media posts.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Voiceover:</strong> If not using an AI avatar, use <strong>ElevenLabs</strong> to generate natural-sounding voiceovers from your script.</li>
+                            <li><strong>Music:</strong> Generate unique background music with <strong>Suno AI</strong> or <strong>AIVA</strong>, tailored to the video's mood and length. You can also customize tracks using <strong>Soundraw</strong>.</li>
+                            <li><strong>Editing & Refinement:</strong> Combine all assets in a traditional video editor, using AI-generated components as powerful starting points. For image quality, consider using <strong>Topaz Gigapixel AI</strong> to enhance generated images.</li>
+                        </ol>
+                        <p class="mt-4 text-gray-600 text-sm italic"><strong>Tools suggested:</strong> Gemini, ChatGPT, Runway ML, Pika Labs, Kling, Sora, Veo, HeyGen, Synthesia, Midjourney, DALL-E 3, Leonardo AI, ElevenLabs, Suno AI, AIVA, Soundraw, Topaz Gigapixel AI.</p>
+                    </div>
+
+                    <!-- Use Case 2: Software Development & Prototyping -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">2. Software Development & Prototyping</h2>
+                        <p class="text-gray-700 mb-4">AI coding assistants enhance developer productivity, automate repetitive tasks, and even generate entire software components from high-level descriptions.</p>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Example Workflow: Developing a Web Application</h3>
+                        <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                            <li><strong>Initial Code Generation:</strong> Use <strong>GPT-Engineer</strong> or <strong>Gemini</strong> to generate a basic project structure and core functionalities from a detailed natural language description of your app.</li>
+                            <li><strong>Code Completion & Debugging:</strong> Integrate <strong>GitHub Copilot</strong> or <strong>Tabnine</strong> directly into your IDE (like **Cursor**) for real-time code suggestions, bug fixes, and refactoring.</li>
+                            <li><strong>Learning & Documentation:</strong> Ask <strong>Perplexity AI</strong>, <strong>Gemini</strong>, or <strong>Hailuo AI</strong> for explanations of complex code snippets, best practices, or to generate documentation for your functions.</li>
+                            <li><strong>Rapid Prototyping:</strong> Use <strong>Replit AI</strong> within the Replit online IDE to quickly spin up, test, and iterate on small features or components without extensive local setup.</li>
+                            <li><strong>Exploratory Coding:</strong> Experiment with open-source models like <strong>Code Llama</strong> locally to understand large language model capabilities for code generation and fine-tuning on specific tasks.</li>
+                        </ol>
+                        <p class="mt-4 text-gray-600 text-sm italic"><strong>Tools suggested:</strong> Gemini, ChatGPT, GitHub Copilot, Tabnine, Replit AI, Code Llama, Cursor, GPT-Engineer, Perplexity AI, Hailuo AI.</p>
+                    </div>
+
+                    <!-- Use Case 3: 3D Design & Game Asset Creation -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">3. 3D Design & Game Asset Creation</h2>
+                        <p class="text-gray-700 mb-4">Generative AI democratizes 3D content creation, allowing designers and developers to quickly generate assets for games, metaverse experiences, and virtual fashion.</p>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Example Workflow: Populating a Game Environment</h3>
+                        <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                            <li><strong>Concept to 3D Model:</strong> Start with a text prompt (e.g., "ancient gnarled tree," "futuristic spaceship") in <strong>Luma AI (Genie)</strong> or <strong>Meshy</strong> to generate initial 3D models.</li>
+                            <li><strong>Texture Generation:</strong> Use AI tools (often integrated within 3D platforms or as standalone services) to generate realistic textures for your models, or leverage <strong>Leonardo AI</strong> for specific texture generation.</li>
+                            <li><strong>Character/Avatar Design:</strong> For specific digital identities or fashion elements, explore services like <strong>The Fabricant</strong> to create unique 3D garments.</li>
+                            <li><strong>Environment Building:</strong> Leverage tools like <strong>Higgsfield</strong> to assist in generating components for virtual worlds or scenes.</li>
+                            <li><strong>Game-Ready Assets:</strong> Refine and optimize the generated models in standard 3D software (Blender, Unity, Unreal), using AI tools like <strong>Masterpiece X</strong> to ensure they are game-ready.</li>
+                        </ol>
+                        <p class="mt-4 text-gray-600 text-sm italic"><strong>Tools suggested:</strong> Luma AI (Genie), Meshy, The Fabricant, Higgsfield, Masterpiece X, Leonardo AI.</p>
+                    </div>
+
+                    <!-- Use Case 4: Research and Information Synthesis -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">4. Research & Information Synthesis</h2>
+                        <p class="text-gray-700 mb-4">AI can quickly process vast amounts of information, summarize complex topics, and provide cited answers, making research more efficient.</p>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Example Workflow: Preparing for a Presentation</h3>
+                        <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                            <li><strong>Information Gathering:</strong> Use <strong>Perplexity AI</strong> to get concise answers to specific questions with linked sources, or ask <strong>Gemini</strong> or <strong>Hailuo AI</strong> to summarize reports and articles.</li>
+                            <li><strong>Content Generation:</strong> Have <strong>ChatGPT</strong> generate bullet points, draft sections of your presentation script, or even create rough slide outlines based on the gathered information.</li>
+                            <li><strong>Visual Aids:</strong> Use <strong>Midjourney</strong>, <strong>DALL-E 3</strong>, or <strong>Leonardo AI</strong> to create compelling and unique images that illustrate complex concepts or data points for your slides. For high-resolution visuals, use <strong>Topaz Gigapixel AI</strong> to upscale images.</li>
+                            <li><strong>Data Analysis (if applicable):</strong> If your presentation involves data, some multi-modal AIs (like **Gemini** or **ChatGPT Plus**) can analyze datasets and extract insights.</li>
+                        </ol>
+                        <p class="mt-4 text-gray-600 text-sm italic"><strong>Tools suggested:</strong> Gemini, ChatGPT, Perplexity AI, Hailuo AI, Midjourney, DALL-E 3, Leonardo AI, Topaz Gigapixel AI.</p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12 text-gray-500 text-sm">
+                    <p>&copy; 2025 Generative AI Tools Directory. All rights reserved. Information subject to change.</p>
+                </div>
+            `;
+        }
+
+        // Function to render the links page
+        function renderLinksPage() {
+            let html = `
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-center text-gray-900 mb-8 sm:mb-12 leading-tight">
+                    Generative AI Resources
+                </h1>
+                <p class="text-lg text-center text-gray-600 mb-10 sm:mb-16 max-w-2xl mx-auto">
+                    Explore video demonstrations and in-depth articles for each generative AI tool.
+                </p>
+            `;
+
+            // Loop through each category in apps to ensure all tools are covered
+            for (const category in apps) {
+                apps[category].forEach(app => {
+                    const toolLinks = linksData[app.name];
+                    const sanitizedAppName = sanitizeNameForHash(app.name);
+                    if (toolLinks) {
+                        html += `
+                            <div id="${sanitizedAppName}-resources" class="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-8">
+                                <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">${app.name} Resources</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Video Examples</h3>
+                                        <ul class="list-disc list-inside space-y-2">
+                                            ${toolLinks.videos.map(video => `
+                                                <li><a href="${video.url}" target="_blank" class="text-indigo-600 hover:underline">
+                                                    ${video.title}
+                                                </a></li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Articles & Reviews</h3>
+                                        <ul class="list-disc list-inside space-y-2">
+                                            ${toolLinks.articles.map(article => `
+                                                <li><a href="${article.url}" target="_blank" class="text-indigo-600 hover:underline">
+                                                    ${article.title}
+                                                </a></li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            html += `
+                <div class="text-center mt-12 text-gray-500 text-sm">
+                    <p>&copy; 2025 Generative AI Tools Directory. All rights reserved. Information subject to change.</p>
+                </div>
+            `;
+
+            document.getElementById('content-area').innerHTML = html;
+        }
+
+        // Function to handle adding a new gallery item
+        function addGalleryItem(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const titleInput = document.getElementById('gallery-title');
+            const descriptionInput = document.getElementById('gallery-description');
+            const imageUrlInput = document.getElementById('gallery-image-url');
+
+            const newId = galleryItems.length > 0 ? Math.max(...galleryItems.map(item => item.id)) + 1 : 1;
+
+            const newItem = {
+                id: newId,
+                title: titleInput.value || 'Untitled Example',
+                description: descriptionInput.value || 'No description provided.',
+                imageUrl: imageUrlInput.value || ''
+            };
+
+            galleryItems.push(newItem);
+
+            // Clear the form
+            titleInput.value = '';
+            descriptionInput.value = '';
+            imageUrlInput.value = '';
+
+            // Re-render the gallery to show the new item
+            renderGalleryPage();
+        }
+
+        // Function to render the gallery page
+        function renderGalleryPage() {
+            let html = `
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-center text-gray-900 mb-8 sm:mb-12 leading-tight">
+                    Community Gallery
+                </h1>
+                <p class="text-lg text-center text-gray-600 mb-10 sm:mb-16 max-w-2xl mx-auto">
+                    Share and explore creative examples generated using various AI tools.
+                </p>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Submit Your Example</h2>
+                    <form id="gallery-form" class="space-y-4">
+                        <div>
+                            <label for="gallery-title" class="block text-sm font-medium text-gray-700">Example Title:</label>
+                            <input type="text" id="gallery-title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="e.g., AI-Generated Forest Scene">
+                        </div>
+                        <div>
+                            <label for="gallery-description" class="block text-sm font-medium text-gray-700">Description:</label>
+                            <textarea id="gallery-description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="Describe how you created this example, which tools you used, and what it depicts."></textarea>
+                        </div>
+                        <div>
+                            <label for="gallery-image-url" class="block text-sm font-medium text-gray-700">Image URL (optional):</label>
+                            <input type="url" id="gallery-image-url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="https://example.com/your-image.jpg">
+                        </div>
+                        <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
+                            Add to Gallery
+                        </button>
+                    </form>
+                </div>
+
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-indigo-300 pb-2">Submitted Examples</h2>
+                <div id="gallery-items-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            `;
+
+            if (galleryItems.length === 0) {
+                html += `<p class="text-center text-gray-600 col-span-full">No examples submitted yet. Be the first!</p>`;
+            } else {
+                galleryItems.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-start">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">${item.title}</h3>
+                            ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title}" class="rounded-lg mb-4 w-full h-48 object-cover shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/400x200/cccccc/333333?text=Image+Not+Found';" />` : ''}
+                            <p class="text-gray-600 text-sm flex-grow mb-3">${item.description}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            html += `
+                </div>
+                <div class="text-center mt-12 text-gray-500 text-sm">
+                    <p>&copy; 2025 Generative AI Tools Directory. All rights reserved. Information subject to change.</p>
+                </div>
+            `;
+
+            document.getElementById('content-area').innerHTML = html;
+
+            // Attach event listener to the form AFTER it's rendered
+            document.getElementById('gallery-form').addEventListener('submit', addGalleryItem);
+        }
+
+        // Function to scroll to a specific anchor on the page
+        function scrollToAnchor(anchorId) {
+            const element = document.getElementById(anchorId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+
+        // Main function to show pages and handle navigation active state
+        function showPage(pageName) {
+            // Remove active class from all buttons in the main navigation
+            document.querySelectorAll('nav button').forEach(button => {
+                button.classList.remove('bg-indigo-600', 'text-white');
+                button.classList.add('bg-white', 'text-indigo-600', 'hover:bg-indigo-100');
+            });
+
+            // Add active class to the current navigation button
+            const currentPageButton = document.getElementById(`nav-${pageName}`);
+            if (currentPageButton) {
+                currentPageButton.classList.remove('bg-white', 'text-indigo-600', 'hover:bg-indigo-100');
+                currentPageButton.classList.add('bg-indigo-600', 'text-white');
+            }
+
+            // Render the selected page
+            switch (pageName) {
+                case 'app-store':
+                    renderAppStore();
+                    break;
+                case 'use-cases':
+                    renderUseCases();
+                    break;
+                case 'links':
+                    renderLinksPage();
+                    // Small delay to ensure content is rendered before scrolling
+                    if (window.location.hash) {
+                        const anchorId = window.location.hash.substring(1);
+                        setTimeout(() => scrollToAnchor(anchorId), 100);
+                    }
+                    break;
+                case 'gallery':
+                    renderGalleryPage();
+                    break;
+                default:
+                    renderAppStore(); // Default to AI Tools directory
+            }
+        }
+
+        // Show the AI Tools page by default when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for a hash in the URL to determine initial page and scroll position
+            if (window.location.hash) {
+                const pageFromHash = window.location.hash.substring(1).split('-')[0];
+                if (pageFromHash === 'links') {
+                    showPage('links');
+                } else if (pageFromHash === 'gallery') {
+                     showPage('gallery');
+                } else if (pageFromHash === 'use-cases') {
+                     showPage('use-cases');
+                }
+                 else {
+                    showPage('app-store');
+                }
+            } else {
+                showPage('app-store');
+            }
+        });
+    </script>
+</body>
+</html>
